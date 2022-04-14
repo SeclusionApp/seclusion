@@ -8,7 +8,7 @@ import (
 
 func InitEnv() {
 	// Set the port os.Env from the config file
-	os.Setenv("PORT", config.Port)
+	os.Setenv("PORT", config.PORT)
 
 	// Set the JWT secret os.Env from the config file
 	os.Setenv("JWT_SECRET", config.JWT_SECRET)

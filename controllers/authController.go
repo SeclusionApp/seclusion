@@ -12,27 +12,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Index(c *fiber.Ctx) error {
-	// check if user is logged in
-	cookie := c.Cookies("token")
-
-	// TODO: ADD MIDDLEWARE TO CHECK IF USER IS LOGGED IN LOGIC, Controller should not be responsible for this.
-
-	_, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(util.GetEnv("JWT_SECRET", "secret")), nil
-	})
-
-	// if not logged in, redirect to login
-	if err != nil {
-		return c.Redirect("/login")
-	}
-
-	// if logged in, render index
-	return c.Render("index", fiber.Map{
-		"Title": "Seclusion",
-	})
-}
-
 func Register(c *fiber.Ctx) error {
 	var data map[string]string
 
@@ -42,10 +21,21 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
+	// Check if username is taken
+	user := models.User{}
+
+	database.DB.Where("username = ?", data["username"]).First(&user)
+
+	if user.ID != 0 {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "Username is already taken",
+		})
+	}
+
 	password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
 	util.HandleError(err, "Failed to hash password")
 
-	user := models.User{
+	user = models.User{
 		Username: data["username"],
 		Password: password,
 	}
@@ -121,7 +111,10 @@ func User(c *fiber.Ctx) error {
 
 	database.DB.Where("id = ?", claims.Issuer).First(&user)
 
-	return c.JSON(user)
+	return c.JSON(fiber.Map{
+		"status": "ok",
+		"user":   user,
+	})
 }
 
 func Logout(c *fiber.Ctx) error {

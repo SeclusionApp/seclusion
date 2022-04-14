@@ -6,9 +6,24 @@ import (
 )
 
 func Setup(app *fiber.App) {
-	app.Get("/", controllers.Index)
-	app.Post("/api/register", controllers.Register)
-	app.Post("/api/login", controllers.Login)
-	app.Get("/api/user", controllers.User)
-	app.Post("/api/logout", controllers.Logout)
+
+	/*
+	 * Main Routes
+	 */
+	app.Get("/v1/", controllers.Index)
+
+	/*
+	 * Auth Routes
+	 */
+	app.Post("/v1/auth/register", controllers.Register)
+	app.Post("/v1/auth/login", controllers.Login)
+	app.Post("/v1/auth/logout", controllers.Logout)
+
+	/*
+	 * User Routes
+	 */
+	app.Get("/v1/user", controllers.User)
+	//app.Get("/v1/:user/channels", controllers.UserChannels)
+	//app.Get("/v1/:user/channels/:channel", controllers.UserChannel)
+
 }
