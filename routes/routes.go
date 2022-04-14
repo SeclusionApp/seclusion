@@ -8,6 +8,11 @@ import (
 func Setup(app *fiber.App) {
 
 	/*
+	 * These are the routes for the main API.
+	 * Note that the routes are protected by JWT.
+	 */
+
+	/*
 	 * Main Routes
 	 */
 	app.Get("/v1/", controllers.Index)
@@ -15,15 +20,17 @@ func Setup(app *fiber.App) {
 	/*
 	 * Auth Routes
 	 */
-	app.Post("/v1/auth/register", controllers.Register)
-	app.Post("/v1/auth/login", controllers.Login)
-	app.Post("/v1/auth/logout", controllers.Logout)
+	app.Post("/v1/auth/register", controllers.Register) // Register a new user
+	app.Post("/v1/auth/login", controllers.Login)       // Login a user
+	app.Post("/v1/auth/logout", controllers.Logout)     // Logout a user
 
 	/*
 	 * User Routes
 	 */
-	app.Get("/v1/user", controllers.User)
-	//app.Get("/v1/:user/channels", controllers.UserChannels)
-	//app.Get("/v1/:user/channels/:channel", controllers.UserChannel)
+	app.Get("/v1/user", controllers.User)                                // Get User
+	app.Get("/v1/user/channels", controllers.UserChannels)               // Get User Channels
+	app.Get("/v1/user/channels/:channel_id", controllers.UserChannel)    // Get User Channel by ID
+	app.Post("/v1/user/channels/:channel_id", controllers.UserChannel)   // Add User to Channel
+	app.Delete("/v1/user/channels/:channel_id", controllers.UserChannel) // Remove User from Channel
 
 }
