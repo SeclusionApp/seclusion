@@ -15,4 +15,6 @@ const (
 	LOGGER_TIME_FORMAT = "15:04:05"
 	LOGGER_TIME_ZONE   = "Local"
 	LOGGER_OUTPUT      = "./log.txt"
+
+	DB_OPEN = "test:password@/seclusion"
 )
