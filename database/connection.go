@@ -1,11 +1,10 @@
 package database
 
 import (
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
-
 	"github.com/seclusionapp/seclusion/models"
 	"github.com/seclusionapp/seclusion/util"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 // We are using a global variable to store the database connection

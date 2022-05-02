@@ -52,10 +52,10 @@ func Setup(app *fiber.App) {
 	/*
 	 * Message Routes
 	 */
-	app.Get("/v1/messages", controllers.Messages)
-	app.Get("/v1/message/:id", controllers.Message)
-	app.Get("/v1/messages/:channel_id", controllers.Messages)
-	app.Post("/v1/message", controllers.Message)
-	app.Delete("/v1/message/:id", controllers.Message)
+	app.Get("/v1/messages", controllers.Messages)             // Get all messages
+	app.Get("/v1/message/:id", controllers.Message)           // Get a message by ID
+	app.Get("/v1/messages/:channel_id", controllers.Messages) // Get all messages for a channel
+	app.Post("/v1/message", controllers.Message)              // Create a new message
+	app.Delete("/v1/message/:id", controllers.Message)        // Delete a message by ID
 
 }

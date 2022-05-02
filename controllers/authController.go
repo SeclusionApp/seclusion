@@ -25,9 +25,11 @@ func Register(c *fiber.Ctx) error {
 	// Check if username is taken
 	user := models.User{}
 
-	if database.DB.Where("username = ?", data["username"]).First(&user) != nil {
+	database.DB.Where("username = ?", data["username"]).First(&user)
+
+	if user.ID != 0 {
 		return c.Status(400).JSON(fiber.Map{
-			"error": "Username is already taken.",
+			"error": "Username is already taken",
 		})
 	}
 
