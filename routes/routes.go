@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/seclusionapp/seclusion/controllers"
 )
 
@@ -9,14 +10,19 @@ func Setup(app *fiber.App) {
 
 	/*
 	 * These are the routes for the main API.
-	 * Note that the routes are protected by JWT.
+	 * Note that the routes are protected by a JWT token stored in a cookie after auth.
 	 */
 
 	/*
 	 * Main Routes
 	 */
 	app.Get("/v1/", controllers.Index)
-
+	app.Get("/v1/status", monitor.New(
+		monitor.Config{
+			APIOnly: true,
+			Next:    nil,
+		},
+	))
 	/*
 	 * Auth Routes
 	 */
@@ -27,10 +33,29 @@ func Setup(app *fiber.App) {
 	/*
 	 * User Routes
 	 */
-	app.Get("/v1/user", controllers.User)                                // Get User
-	app.Get("/v1/user/channels", controllers.UserChannels)               // Get User Channels
-	app.Get("/v1/user/channels/:channel_id", controllers.UserChannel)    // Get User Channel by ID
-	app.Post("/v1/user/channels/:channel_id", controllers.UserChannel)   // Add User to Channel
-	app.Delete("/v1/user/channels/:channel_id", controllers.UserChannel) // Remove User from Channel
+	app.Get("/v1/user", controllers.User)
+	app.Get("/v1/users/:id", controllers.User)
+
+	/*
+	 * Channel Routes
+	 */
+	// Getters
+	app.Get("/v1/channels", controllers.Channels)
+	app.Get("/v1/channels/:id", controllers.Channel)
+
+	// Creators
+	app.Post("/v1/channels/:name", controllers.Channel)
+
+	// Deletions
+	app.Delete("/v1/channels/:id", controllers.Channel)
+
+	/*
+	 * Message Routes
+	 */
+	app.Get("/v1/messages", controllers.Messages)
+	app.Get("/v1/message/:id", controllers.Message)
+	app.Get("/v1/messages/:channel_id", controllers.Messages)
+	app.Post("/v1/message", controllers.Message)
+	app.Delete("/v1/message/:id", controllers.Message)
 
 }

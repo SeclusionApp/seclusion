@@ -1,6 +1,9 @@
 package util
 
-import "os"
+import (
+	"os"
+	"time"
+)
 
 func GetPort() string {
 	port := os.Getenv("PORT")
@@ -16,4 +19,8 @@ func GetEnv(key, fallback string) string {
 		return fallback
 	}
 	return value
+}
+
+func GetTime() int64 {
+	return time.Now().Unix()
 }

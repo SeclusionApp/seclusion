@@ -8,6 +8,7 @@ import (
 	"github.com/seclusionapp/seclusion/util"
 )
 
+// We are using a global variable to store the database connection
 var DB *gorm.DB
 
 func Connect() {

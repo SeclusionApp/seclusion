@@ -2,26 +2,34 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt"
+	"github.com/seclusionapp/seclusion/database"
 	"github.com/seclusionapp/seclusion/models"
+	"github.com/seclusionapp/seclusion/util"
 )
 
-func UserChannel(c *fiber.Ctx) error {
-	user := c.Locals("user").(*models.User)
-	channel := c.Locals("channel").(*models.Channel)
+func User(c *fiber.Ctx) error {
 
+	token := c.Cookies("token")
+
+	if !util.VerifyToken(token) { // If token is invalid
+		return c.Status(401).JSON(fiber.Map{
+			"status":  "error",
+			"message": "Invalid Token",
+		})
+	}
+
+	tokenParse := util.GetToken(token)
+	claims := tokenParse.Claims.(*jwt.StandardClaims)
+	var user models.User
+	database.DB.Where("id = ?", claims.Issuer).First(&user) // Get user from database
+	// Get channels from database channel_users table
+	var channels []models.Channel
+	database.DB.Joins("JOIN channel_users ON channel_users.channel_id = channels.id").Where("channel_users.user_id = ?", user.ID).Find(&channels)
 	return c.JSON(fiber.Map{
-		"status":  "ok",
-		"user":    user,
-		"channel": channel,
+		"status":   "ok",
+		"user":     user,
+		"channels": channels,
 	})
-}
 
-func UserChannels(c *fiber.Ctx) error {
-	user := c.Locals("user").(*models.User)
-
-	return c.JSON(fiber.Map{
-		"status":  "ok",
-		"message": "User Channels Hit",
-		"user":    user,
-	})
 }

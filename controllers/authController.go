@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
+	"github.com/seclusionapp/seclusion/config"
 	"github.com/seclusionapp/seclusion/database"
 	"github.com/seclusionapp/seclusion/models"
 	"github.com/seclusionapp/seclusion/util"
@@ -24,11 +25,9 @@ func Register(c *fiber.Ctx) error {
 	// Check if username is taken
 	user := models.User{}
 
-	database.DB.Where("username = ?", data["username"]).First(&user)
-
-	if user.ID != 0 {
+	if database.DB.Where("username = ?", data["username"]).First(&user) != nil {
 		return c.Status(400).JSON(fiber.Map{
-			"error": "Username is already taken",
+			"error": "Username is already taken.",
 		})
 	}
 
@@ -67,7 +66,7 @@ func Login(c *fiber.Ctx) error {
 
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    strconv.Itoa(int(user.ID)),
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
+		ExpiresAt: time.Now().Add(time.Second * config.JWT_EXPIRY).Unix(),
 	})
 
 	token, err := claims.SignedString([]byte(util.GetEnv("JWT_SECRET", "secret")))
@@ -80,7 +79,7 @@ func Login(c *fiber.Ctx) error {
 	cookie := &fiber.Cookie{
 		Name:     "token",
 		Value:    token,
-		Expires:  time.Now().Add(time.Hour * 24),
+		Expires:  time.Now().Add(time.Second * config.JWT_EXPIRY),
 		HTTPOnly: true,
 	}
 
@@ -89,31 +88,6 @@ func Login(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Successfully logged in",
 		"token":   token,
-	})
-}
-
-func User(c *fiber.Ctx) error {
-	cookie := c.Cookies("token")
-
-	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(util.GetEnv("JWT_SECRET", "secret")), nil
-	})
-
-	if err != nil {
-		return c.Status(401).JSON(fiber.Map{
-			"error": "Invalid token / Unauthorized",
-		})
-	}
-
-	claims := token.Claims.(*jwt.StandardClaims)
-
-	var user models.User
-
-	database.DB.Where("id = ?", claims.Issuer).First(&user)
-
-	return c.JSON(fiber.Map{
-		"status": "ok",
-		"user":   user,
 	})
 }
 
