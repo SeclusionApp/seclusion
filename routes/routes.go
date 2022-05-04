@@ -3,10 +3,17 @@ package routes
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
-	"github.com/seclusionapp/seclusion/controllers"
+	"github.com/seclusionapp/seclusion/controllers/api"
+	"github.com/seclusionapp/seclusion/controllers/frontend"
 )
 
 func Setup(app *fiber.App) {
+
+	/*
+	 * Web Routes
+	 *
+	 */
+	app.Get("/", frontend.Index)
 
 	/*
 	 * These are the routes for the main API.
@@ -14,9 +21,9 @@ func Setup(app *fiber.App) {
 	 */
 
 	/*
-	 * Main Routes
+	 * Main Routes API
 	 */
-	app.Get("/v1/", controllers.Index)
+	app.Get("/v1/", api.Index)
 	app.Get("/v1/status", monitor.New(
 		monitor.Config{
 			APIOnly: true,
@@ -26,36 +33,36 @@ func Setup(app *fiber.App) {
 	/*
 	 * Auth Routes
 	 */
-	app.Post("/v1/auth/register", controllers.Register) // Register a new user
-	app.Post("/v1/auth/login", controllers.Login)       // Login a user
-	app.Post("/v1/auth/logout", controllers.Logout)     // Logout a user
+	app.Post("/v1/auth/register", api.Register) // Register a new user
+	app.Post("/v1/auth/login", api.Login)       // Login a user
+	app.Post("/v1/auth/logout", api.Logout)     // Logout a user
 
 	/*
 	 * User Routes
 	 */
-	app.Get("/v1/user", controllers.User)
-	app.Get("/v1/users/:id", controllers.User)
+	app.Get("/v1/user", api.User)
+	app.Get("/v1/users/:id", api.User)
 
 	/*
 	 * Channel Routes
 	 */
 	// Getters
-	app.Get("/v1/channels", controllers.Channels)
-	app.Get("/v1/channels/:id", controllers.Channel)
+	app.Get("/v1/channels", api.Channels)
+	app.Get("/v1/channels/:id", api.Channel)
 
 	// Creators
-	app.Post("/v1/channels/:name", controllers.Channel)
+	app.Post("/v1/channels/:name", api.Channel)
 
 	// Deletions
-	app.Delete("/v1/channels/:id", controllers.Channel)
+	app.Delete("/v1/channels/:id", api.Channel)
 
 	/*
 	 * Message Routes
 	 */
-	app.Get("/v1/messages", controllers.Messages)             // Get all messages
-	app.Get("/v1/message/:id", controllers.Message)           // Get a message by ID
-	app.Get("/v1/messages/:channel_id", controllers.Messages) // Get all messages for a channel
-	app.Post("/v1/message", controllers.Message)              // Create a new message
-	app.Delete("/v1/message/:id", controllers.Message)        // Delete a message by ID
+	app.Get("/v1/messages", api.Messages)             // Get all messages
+	app.Get("/v1/message/:id", api.Message)           // Get a message by ID
+	app.Get("/v1/messages/:channel_id", api.Messages) // Get all messages for a channel
+	app.Post("/v1/message", api.Message)              // Create a new message
+	app.Delete("/v1/message/:id", api.Message)        // Delete a message by ID
 
 }

@@ -1,4 +1,4 @@
-package controllers
+package api
 
 import (
 	"strconv"
@@ -8,7 +8,7 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/seclusionapp/seclusion/config"
 	"github.com/seclusionapp/seclusion/database"
-	"github.com/seclusionapp/seclusion/models"
+	structs "github.com/seclusionapp/seclusion/database/structs"
 	"github.com/seclusionapp/seclusion/util"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -23,7 +23,7 @@ func Register(c *fiber.Ctx) error {
 	}
 
 	// Check if username is taken
-	user := models.User{}
+	user := structs.User{}
 
 	database.DB.Where("username = ?", data["username"]).First(&user)
 
@@ -36,7 +36,7 @@ func Register(c *fiber.Ctx) error {
 	password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
 	util.HandleError(err, "Failed to hash password")
 
-	user = models.User{
+	user = structs.User{
 		Username: data["username"],
 		Password: password,
 	}
@@ -56,7 +56,7 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	user := models.User{}
+	user := structs.User{}
 
 	database.DB.Where("username = ?", data["username"]).First(&user)
 

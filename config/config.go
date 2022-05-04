@@ -1,5 +1,11 @@
 package config
 
+import (
+	"os"
+
+	"github.com/gofiber/fiber/v2/middleware/logger"
+)
+
 const (
 	// Port is the port to run the server on
 	PORT = "8080"
@@ -14,7 +20,14 @@ const (
 	LOGGER_FORMAT      = "[${time}] ${status} ${pid} ${latency} ${locals:requestid} ${ip}:${port} - ${method} ${path}\n"
 	LOGGER_TIME_FORMAT = "15:04:05"
 	LOGGER_TIME_ZONE   = "Local"
-	LOGGER_OUTPUT      = "./log.txt"
+	LOGGER_OUTPUT      = "./logs/seclusion.log"
 
 	DB_OPEN = "test:password@/seclusion"
 )
+
+var LOGGER = &logger.Config{
+	Format:     LOGGER_FORMAT,
+	TimeFormat: LOGGER_TIME_FORMAT,
+	TimeZone:   LOGGER_TIME_ZONE,
+	Output:     os.Stdout,
+}

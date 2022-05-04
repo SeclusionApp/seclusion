@@ -2,7 +2,7 @@ package database
 
 import (
 	"github.com/seclusionapp/seclusion/config"
-	"github.com/seclusionapp/seclusion/models"
+	models "github.com/seclusionapp/seclusion/database/structs"
 	"github.com/seclusionapp/seclusion/util"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

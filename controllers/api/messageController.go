@@ -1,4 +1,4 @@
-package controllers
+package api
 
 import (
 	"strconv"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/seclusionapp/seclusion/database"
+	structs "github.com/seclusionapp/seclusion/database/structs"
 	"github.com/seclusionapp/seclusion/models"
 	"github.com/seclusionapp/seclusion/util"
 )
@@ -22,19 +23,8 @@ func Messages(c *fiber.Ctx) error {
 	}
 
 	if c.Method() == "GET" {
-
-		var messages []models.Message
-
-		if c.Params("channel_id") != "" {
-			database.DB.Where("channel_id = ?", c.Params("channel_id")).Find(&messages) // Get messages from database
-		} else {
-			database.DB.Find(&messages) // Get messages from database
-		}
-		return c.JSON(fiber.Map{
-			"status":   "ok",
-			"method":   c.Method(),
-			"messages": messages,
-		})
+		models.GetMessages(c)
+		return nil
 	}
 
 	return c.Status(400).JSON(fiber.Map{
@@ -59,7 +49,7 @@ func Message(c *fiber.Ctx) error {
 
 		// if is id param
 		if c.Params("id") != "" {
-			var message models.Message
+			var message structs.Message
 			database.DB.Where("id = ?", c.Params("id")).First(&message) // Get message from database
 			return c.JSON(fiber.Map{
 				"status":  "ok",
@@ -70,7 +60,7 @@ func Message(c *fiber.Ctx) error {
 
 		// if is channel_id param
 		if c.Params("channel_id") != "" {
-			var messages []models.Message
+			var messages []structs.Message
 			database.DB.Where("channel_id = ?", c.Params("channel_id")).Find(&messages) // Get messages from database
 			return c.JSON(fiber.Map{
 				"status":   "ok",
@@ -81,7 +71,7 @@ func Message(c *fiber.Ctx) error {
 
 		// if is user_id param
 		if c.Params("user_id") != "" {
-			var messages []models.Message
+			var messages []structs.Message
 			database.DB.Where("user_id = ?", c.Params("user_id")).Find(&messages) // Get messages from database
 			return c.JSON(fiber.Map{
 				"status":   "ok",
@@ -101,7 +91,7 @@ func Message(c *fiber.Ctx) error {
 			})
 		}
 
-		var message models.Message
+		var message structs.Message
 		message.Content = data["content"]
 		user_id, err := strconv.Atoi(data["user_id"])
 		if err != nil {
@@ -136,7 +126,7 @@ func Message(c *fiber.Ctx) error {
 	}
 
 	if c.Method() == "DELETE" {
-		var message models.Message
+		var message structs.Message
 		database.DB.Where("id = ?", c.Params("id")).First(&message) // Get message from database
 		database.DB.Delete(&message)                                // Delete message from database
 		return c.JSON(fiber.Map{

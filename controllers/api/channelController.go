@@ -1,10 +1,10 @@
-package controllers
+package api
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
 	"github.com/seclusionapp/seclusion/database"
-	"github.com/seclusionapp/seclusion/models"
+	structs "github.com/seclusionapp/seclusion/database/structs"
 	"github.com/seclusionapp/seclusion/util"
 )
 
@@ -21,8 +21,8 @@ func Channels(c *fiber.Ctx) error {
 
 	tokenParse := util.GetToken(token)
 	claims := tokenParse.Claims.(*jwt.StandardClaims)
-	var channels []models.Channel //Get all channels from database "channels" table
-	database.DB.Where("user_id = ?", claims.Issuer).Find(&models.Channel_User{}, &channels)
+	var channels []structs.Channel //Get all channels from database "channels" table
+	database.DB.Where("user_id = ?", claims.Issuer).Find(&structs.Channel_User{}, &channels)
 	return c.JSON(fiber.Map{
 		"status":   "ok",
 		"channels": channels,
@@ -42,7 +42,7 @@ func Channel(c *fiber.Ctx) error {
 	}
 
 	if c.Method() == "GET" {
-		var channel models.Channel
+		var channel structs.Channel
 		database.DB.Where("id = ?", c.Params("id")).First(&channel) // Get channel from database
 		return c.JSON(fiber.Map{
 			"status":  "ok",
@@ -52,15 +52,15 @@ func Channel(c *fiber.Ctx) error {
 	}
 
 	if c.Method() == "POST" {
-		var channel models.Channel
+		var channel structs.Channel
 		channel.Name = c.Params("name")
 		database.DB.Create(&channel) // Create channel in database
 		// Add user to channel
 		tokenParse := util.GetToken(token)
 		claims := tokenParse.Claims.(*jwt.StandardClaims)
-		var user models.User
+		var user structs.User
 		database.DB.Where("id = ?", claims.Issuer).First(&user) // Get user from database
-		database.DB.Create(&models.Channel_User{
+		database.DB.Create(&structs.Channel_User{
 			ChannelID: channel.ID,
 			UserID:    user.ID,
 		})
@@ -72,7 +72,7 @@ func Channel(c *fiber.Ctx) error {
 	}
 
 	if c.Method() == "DELETE" {
-		var channel models.Channel
+		var channel structs.Channel
 		database.DB.Where("id = ?", c.Params("id")).First(&channel) // Get channel from database
 		database.DB.Delete(&channel)                                // Delete channel from database
 		return c.JSON(fiber.Map{

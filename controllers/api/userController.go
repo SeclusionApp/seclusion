@@ -1,10 +1,10 @@
-package controllers
+package api
 
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
 	"github.com/seclusionapp/seclusion/database"
-	"github.com/seclusionapp/seclusion/models"
+	models "github.com/seclusionapp/seclusion/database/structs"
 	"github.com/seclusionapp/seclusion/util"
 )
 
