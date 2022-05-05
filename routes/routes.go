@@ -4,16 +4,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/monitor"
 	"github.com/seclusionapp/seclusion/controllers/api"
-	"github.com/seclusionapp/seclusion/controllers/frontend"
 )
 
 func Setup(app *fiber.App) {
-
-	/*
-	 * Web Routes
-	 *
-	 */
-	app.Get("/", frontend.Index)
 
 	/*
 	 * These are the routes for the main API.
