@@ -33,11 +33,30 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
+	//Verify Emial
+	if !util.ValidMailAddress(data["email"]) {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "Email is not valid",
+		})
+	}
+
+	//Check if email is taken
+	user = structs.User{}
+
+	database.DB.Where("email = ?", data["email"]).First(&user)
+
+	if user.ID != 0 {
+		return c.Status(400).JSON(fiber.Map{
+			"error": "Email is already in use.",
+		})
+	}
+
 	password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
 	util.HandleError(err, "Failed to hash password")
 
 	user = structs.User{
 		Username: data["username"],
+		Email:    data["email"],
 		Password: password,
 	}
 

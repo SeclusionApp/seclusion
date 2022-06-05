@@ -4,7 +4,7 @@ type User struct {
 	ID       int    `gorm:"primary_key" json:"id"`
 	Username string `gorm:"not null" json:"username"`
 	Email    string `gorm:"not null" json:"email"`
-	Password []byte `gorm:"not null" json:"-"` // Hope
+	Password []byte `gorm:"not null" json:"-"` // Security MAX!!!
 }
 
 type Favorited_User struct {

@@ -22,7 +22,7 @@ const (
 	LOGGER_TIME_ZONE   = "Local"
 	LOGGER_OUTPUT      = "./logs/seclusion.log"
 
-	DB_OPEN = "test:password@/seclusion"
+	DB_OPEN = "api:password@/seclusion"
 )
 
 var LOGGER = &logger.Config{

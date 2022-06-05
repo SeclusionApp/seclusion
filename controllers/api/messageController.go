@@ -92,6 +92,13 @@ func Message(c *fiber.Ctx) error {
 		}
 
 		var message structs.Message
+		//if content number of chars is over 600
+		if len(data["content"]) > 600 {
+			return c.Status(400).JSON(fiber.Map{
+				"status":  "error",
+				"message": "Message content is over 600 characters",
+			})
+		}
 		message.Content = data["content"]
 		user_id, err := strconv.Atoi(data["user_id"])
 		if err != nil {

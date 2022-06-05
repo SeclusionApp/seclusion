@@ -13,16 +13,13 @@ func Setup(app *fiber.App) {
 	 * Note that the routes are protected by a JWT token stored in a cookie after auth.
 	 */
 
+	app.Get("/", api.Reroute)
+
 	/*
 	 * Main Routes API
 	 */
 	app.Get("/v1/", api.Index)
-	app.Get("/v1/status", monitor.New(
-		monitor.Config{
-			APIOnly: true,
-			Next:    nil,
-		},
-	))
+	app.Get("/v1/status", monitor.New())
 	/*
 	 * Auth Routes
 	 */
