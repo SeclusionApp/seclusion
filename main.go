@@ -12,19 +12,17 @@ import (
 	"github.com/seclusionapp/seclusion/controllers/api/errors"
 	db "github.com/seclusionapp/seclusion/database"
 	"github.com/seclusionapp/seclusion/routes"
-	"github.com/seclusionapp/seclusion/util"
 )
 
 func main() {
 	db.Connect()
-	PORT := util.GetPort()
 	app := fiber.New()
 	routes.Setup(app)
 
 	app.Use(
 		requestid.New(),
 		limiter.New(limiter.Config{
-			Max:          5,
+			Max:          config.MAX_REQUESTS,
 			LimitReached: errors.LimitReached,
 		}),
 		logger.New(*config.LOGGER),
@@ -32,5 +30,7 @@ func main() {
 			AllowCredentials: true,
 		}),
 	)
-	log.Fatal(app.Listen(PORT))
+	log.Println("[INFO] Server started on port " + config.PORT)
+	log.Println("[INFO] Accessing database: " + config.DB_OPEN)
+	log.Fatal(app.Listen(config.PORT))
 }
