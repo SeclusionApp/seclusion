@@ -27,7 +27,8 @@ func main() {
 		}),
 		logger.New(*config.LOGGER),
 		cors.New(cors.Config{
-			AllowCredentials: true,
+			AllowOrigins: "*",
+			AllowHeaders: "Origin, Content-Type, Accept",
 		}),
 	)
 	log.Println("[INFO] Server started on port " + config.PORT)
