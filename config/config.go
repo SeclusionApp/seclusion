@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
@@ -22,7 +23,7 @@ const (
 	LOGGER_TIME_ZONE   = "Local"
 	LOGGER_OUTPUT      = "./logs/seclusion.log"
 
-	DB_OPEN = "api:password@/seclusion"
+	DB_OPEN = "root:root@/seclusion" //user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
 
 	MAX_REQUESTS = 30
 )
@@ -32,4 +33,12 @@ var LOGGER = &logger.Config{
 	TimeFormat: LOGGER_TIME_FORMAT,
 	TimeZone:   LOGGER_TIME_ZONE,
 	Output:     os.Stdout,
+}
+
+var CORS = &cors.Config{
+	AllowOrigins:     "*",
+	AllowMethods:     "GET,POST,PUT,DELETE,HEAD,PATCH",
+	AllowHeaders:     "Accept,Accept-Encoding,Authorization,Cookie,Content-Length,Content-Type,Content-Type,Host,Origin,Referer,User-Agent",
+	AllowCredentials: false,
+	MaxAge:           3600,
 }

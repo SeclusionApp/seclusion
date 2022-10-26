@@ -1,0 +1,37 @@
+<html>
+
+<head>
+    <title>Seclusion</title>
+    <meta http-equiv="Content-Security-Policy: connect-src http://127.0.0.1:*/">
+</head>
+
+<label for="name">Name</label>
+<input type="text" id="name" name="name" value="">
+<label for="email">Email</label>
+<input type="email" id="email" name="email" value="">
+<label for="password">Password</label>
+<input type="password" id="password" name="password" value="">
+<button type="submit" id="submit">Submit</button>
+
+<script>
+    const name = document.getElementById('name');
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const submit = document.getElementById('submit');
+
+    submit.addEventListener('click', function() {
+        if (name.value === '' || email.value === '' || password.value === '') {
+            alert('Please fill in all fields');
+        } else {
+            Register();
+        }
+    });
+
+
+
+</script>
+
+</html>
+
+<script type="text/javascript" src="js/funcs.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>

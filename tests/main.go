@@ -20,7 +20,20 @@ const (
 func main() {
 	postSpamRegister(URL + "auth/")
 	getSpamMessages(URL + "messages/")
+	postSpamChannels()
 }
+
+func postSpamChannels() {
+	var channel_url = URL + "channels/"
+	for {
+		for i := 0; i < 100; i++ {
+			channel_name := randomString(10)
+			channel_desc := randomString(50)
+			channel := fmt.Sprintf(`{"name":"%s")
+			post(channel_url, channel)
+		}
+		time.Sleep(1 * time.Second)
+	}
 
 func getSpamMessages(url string) {
 	for {

@@ -26,10 +26,7 @@ func main() {
 			LimitReached: errors.LimitReached,
 		}),
 		logger.New(*config.LOGGER),
-		cors.New(cors.Config{
-			AllowOrigins: "*",
-			AllowHeaders: "Origin, Content-Type, Accept",
-		}),
+		cors.New(*config.CORS),
 	)
 	log.Println("[INFO] Server started on port " + config.PORT)
 	log.Println("[INFO] Accessing database: " + config.DB_OPEN)

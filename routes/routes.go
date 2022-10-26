@@ -41,7 +41,7 @@ func Setup(app *fiber.App) {
 	app.Get("/v1/channels/:id", api.Channel)
 
 	// Creators
-	app.Post("/v1/channels/:name", api.Channel)
+	app.Post("/v1/channel/", api.Channel)
 
 	// Deletions
 	app.Delete("/v1/channels/:id", api.Channel)
