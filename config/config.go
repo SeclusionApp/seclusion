@@ -7,7 +7,21 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
+var server = "seclusion-us-east1.database.windows.net"
+var port = 1433
+var user = "seclusion"
+var password = "<your_password>"
+var database = "seclusion"
+
 const (
+
+	// Database Information.
+	DB_SERVER = "seclusion-us-east1.database.windows.net"
+	DB_PORT   = 1433
+	DB_USER   = "seclusion"
+	DB_PASS   = "L0laL0la123!?$"
+	DB_NAME   = "seclusion"
+
 	// Port is the port to run the server on
 	PORT = ":8080"
 
@@ -22,8 +36,6 @@ const (
 	LOGGER_TIME_FORMAT = "15:04:05"
 	LOGGER_TIME_ZONE   = "Local"
 	LOGGER_OUTPUT      = "./logs/seclusion.log"
-
-	DB_OPEN = "root:root@/seclusion" //user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local
 
 	MAX_REQUESTS = 30
 )

@@ -29,6 +29,6 @@ func main() {
 		cors.New(*config.CORS),
 	)
 	log.Println("[INFO] Server started on port " + config.PORT)
-	log.Println("[INFO] Accessing database: " + config.DB_OPEN)
+	log.Println("[INFO] Accessing database: " + config.DB_NAME)
 	log.Fatal(app.Listen(config.PORT))
 }
