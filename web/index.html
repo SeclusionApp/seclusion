@@ -2,7 +2,6 @@
 
 <head>
     <title>Seclusion</title>
-    <meta http-equiv="Content-Security-Policy: connect-src http://127.0.0.1:*/">
 </head>
 
 <label for="name">Name</label>
@@ -19,13 +18,17 @@
     const password = document.getElementById('password');
     const submit = document.getElementById('submit');
 
-    submit.addEventListener('click', function() {
-        if (name.value === '' || email.value === '' || password.value === '') {
-            alert('Please fill in all fields');
-        } else {
-            Register();
-        }
-    });
+    window.post = function(url, data) {
+        return fetch(url, {method: "POST", body: JSON.stringify(data)});
+    }
+
+    function login() {
+        data = {username: name.value, email: email.value, password: password.value};
+        post('http://107.155.116.47:8080/v1/auth/register', data).then(res => res.json()).then(data => {
+            console.log(data);
+        });
+    }
+
 </script>
 
 </html>
