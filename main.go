@@ -17,18 +17,22 @@ import (
 func main() {
 	db.Connect()
 	app := fiber.New()
-	routes.Setup(app)
-
+	
 	app.Use(
 		requestid.New(),
 		limiter.New(limiter.Config{
 			Max:          config.MAX_REQUESTS,
 			LimitReached: errors.LimitReached,
 		}),
+
 		logger.New(*config.LOGGER),
 		cors.New(*config.CORS),
+		
 	)
+	routes.Setup(app)
+
 	log.Println("[INFO] Server started on port " + config.PORT)
 	log.Println("[INFO] Accessing database: " + config.DB_NAME)
+	
 	log.Fatal(app.Listen(config.PORT))
 }

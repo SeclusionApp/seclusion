@@ -7,20 +7,18 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
 
-var server = "seclusion-us-east1.database.windows.net"
-var port = 1433
-var user = "seclusion"
-var password = "<your_password>"
-var database = "seclusion"
+
 
 const (
 
 	// Database Information.
-	DB_SERVER = "seclusion-us-east1.database.windows.net"
-	DB_PORT   = 1433
-	DB_USER   = "seclusion"
-	DB_PASS   = "L0laL0la123!?$"
+	DB_SERVER = "localhost"
+	DB_PORT   = 3306
+	DB_USER   = "postgres"
+	DB_PASS   = "postgres"
 	DB_NAME   = "seclusion"
+
+	DSN = "api:password@/seclusion"
 
 	// Port is the port to run the server on
 	PORT = ":8080"
@@ -48,9 +46,8 @@ var LOGGER = &logger.Config{
 }
 
 var CORS = &cors.Config{
-	AllowOrigins:     "*",
+	AllowOrigins:     "http://localhost:3000,http://192.168.1.123/",
 	AllowMethods:     "GET,POST,PUT,DELETE,HEAD,PATCH",
-	AllowHeaders:     "Accept,Accept-Encoding,Authorization,Cookie,Content-Length,Content-Type,Content-Type,Host,Origin,Referer,User-Agent",
-	AllowCredentials: false,
-	MaxAge:           3600,
+	AllowHeaders:     "Accept, Accept-Encoding, Authorization, Cookie, Set-Cookie, Content-Length, Content-Type, Content-Type, Host, Origin, Referer, User-Agent,Set-Cookie",
+	AllowCredentials: true,
 }
