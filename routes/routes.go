@@ -31,27 +31,27 @@ func Setup(app *fiber.App) {
 	 * User Routes
 	 */
 	app.Get("/v1/user", api.User)
-	app.Get("/v1/users/:id", api.User)
+	app.Get("/v1/users/:id", api.User) // *Change to JSON not path var
 
 	/*
 	 * Channel Routes
 	 */
 	// Getters
 	app.Get("/v1/channels", api.Channels)
-	app.Get("/v1/channels/:id", api.Channel)
+	app.Get("/v1/channels/:id", api.Channel) // *Change to JSON not path var
 
 	// Creators
 	app.Post("/v1/channel/", api.Channel)
 
 	// Deletions
-	app.Delete("/v1/channels/:id", api.Channel)
+	app.Delete("/v1/channels/:id", api.Channel) // *Change to JSON not path var
 
 	/*
 	 * Message Routes
 	 */
 	app.Get("/v1/messages", api.Messages)             // Get all messages
-	app.Get("/v1/message/:id", api.Message)           // Get a message by ID
-	app.Get("/v1/messages/:channel_id", api.Messages) // Get all messages for a channel
+	app.Get("/v1/message/:id", api.Message)           // Get a message by ID // *Change to JSON not path var
+	app.Get("/v1/messages/:channel_id", api.Messages) // Get all messages for a channel // *Change to JSON not path var
 	app.Post("/v1/message", api.Message)              // Create a new message
 	app.Delete("/v1/message/:id", api.Message)        // Delete a message by ID
 

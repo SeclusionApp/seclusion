@@ -11,6 +11,10 @@ import (
 	"github.com/seclusionapp/seclusion/util"
 )
 
+/**
+ * Get all messages
+ */
+
 func Messages(c *fiber.Ctx) error {
 
 	token := c.Cookies("token")
@@ -23,7 +27,7 @@ func Messages(c *fiber.Ctx) error {
 	}
 
 	if c.Method() == "GET" {
-		models.GetMessages(c)
+		models.GetMessages(c) //Change code from model to controller. (Breaks MVC)
 		return nil
 	}
 
@@ -100,6 +104,7 @@ func Message(c *fiber.Ctx) error {
 			})
 		}
 		message.Content = data["content"]
+		
 		user_id, err := strconv.Atoi(data["user_id"])
 		if err != nil {
 			return c.Status(400).JSON(fiber.Map{
