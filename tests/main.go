@@ -29,11 +29,12 @@ func postSpamChannels() {
 		for i := 0; i < 100; i++ {
 			channel_name := randomString(10)
 			channel_desc := randomString(50)
-			channel := fmt.Sprintf(`{"name":"%s")
-			post(channel_url, channel)
+			channel := fmt.Sprintf(`{"name":"%s"`)
+			post(channel_url, channel_name, channel_desc)
 		}
 		time.Sleep(1 * time.Second)
 	}
+}
 
 func getSpamMessages(url string) {
 	for {
