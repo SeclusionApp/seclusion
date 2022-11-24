@@ -26,30 +26,22 @@ const Login: React.FC<loginProps> = ({}) => {
         onSubmit={async (values) => {
           console.log(values);
 
-          let headersList = {};
-
-          let bodyContent = JSON.stringify({
-            email: values.email,
-            password: values.password,
-          });
-
-          let reqOptions = {
-            url: "http://localhost:8080/v1/auth/login",
+          const res = await fetch("http://localhost:8080/v1/auth/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            data: bodyContent,
-            widthCredentials: true,
-          };
+            body: JSON.stringify({
+              email: values.email,
+              password: values.password,
+            }),
+            credentials: "include",
+          });
 
-          let response = await axios.request(reqOptions);
-          if (response.status === 200) {
-            console.log(response.data);
-            localStorage.setItem("token", response.data.token);
-            localStorage.setItem("expires", response.data.expires);
-            router.push("/");
-          }
+          const data = await res.json();
+          console.log(data);
+
+          router.push("/");
         }}
       >
         {({ values, handleChange, handleBlur, handleSubmit }) => (

@@ -101,10 +101,9 @@ func Login(c *fiber.Ctx) error {
 		Name:     "token",
 		Value:    token,
 		Expires:  time.Now().Add(time.Second * config.JWT_EXPIRY),
-		Domain:  util.GetEnv("COOKIE_DOMAIN", "localhost"),
 		HTTPOnly: true,
-		Secure:  false,
-		MaxAge:  3600,
+		Path:   "/",
+		SameSite: "lax",
 	}
 
 	c.Cookie(&cookie)
