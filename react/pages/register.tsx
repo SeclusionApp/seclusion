@@ -1,59 +1,59 @@
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Input,
-  Link,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Container, Input, Link, Text } from "@chakra-ui/react";
 import React from "react";
 import { Formik } from "formik";
 import axios from "axios";
 import { useRouter } from "next/router";
-import Head from "next/head";
 interface loginProps {}
 
-const Login: React.FC<loginProps> = ({}) => {
+const Register: React.FC<loginProps> = ({}) => {
   const router = useRouter();
   return (
-    <Container mt="20">
-      <Head>
-        <title>Login</title>
-      </Head>
+    <Container>
+      <h1>Register</h1>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ username: "", password: "", email: "" }}
         onSubmit={async (values) => {
           console.log(values);
 
-          let headersList = {};
+          let headersList = {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+          };
 
           let bodyContent = JSON.stringify({
             email: values.email,
+            username: values.username,
             password: values.password,
           });
 
           let reqOptions = {
-            url: "http://localhost:8080/v1/auth/login",
+            url: "http://localhost:8080/v1/auth/register",
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: headersList,
             data: bodyContent,
-            widthCredentials: true,
           };
 
           let response = await axios.request(reqOptions);
+          if (response.data.error) {
+            console.log(response.data.error);
+          }
           if (response.status === 200) {
             console.log(response.data);
-            localStorage.setItem("token", response.data.token);
-            localStorage.setItem("expires", response.data.expires);
             router.push("/");
           }
         }}
       >
         {({ values, handleChange, handleBlur, handleSubmit }) => (
-          <Container>
+          <Box>
+            <Input
+              name="username"
+              placeholder="username"
+              value={values.username}
+              size="md"
+              onChange={handleChange("username")}
+              onBlur={handleBlur("username")}
+              onError={(err) => console.log(err)}
+            />
             <Input
               name="email"
               placeholder="email"
@@ -67,31 +67,20 @@ const Login: React.FC<loginProps> = ({}) => {
               placeholder="password"
               type={"password"}
               size="md"
-              pt={5}
-              pb={5}
               value={values.password}
               onChange={handleChange("password")}
               onBlur={handleBlur("password")}
             />
-            <Center pt={5} pb={5}>
-              <Button
-                type="submit"
-                pt={2}
-                size="md"
-                variant="solid"
-                bg={"blue.500"}
-                onClick={() => handleSubmit()}
-              >
-                Submit
-              </Button>
-            </Center>
+            <Button type="submit" onClick={() => handleSubmit()}>
+              Submit
+            </Button>
             <Text>
               Don't have an account? <Link href="/register">Register</Link>
             </Text>
-          </Container>
+          </Box>
         )}
       </Formik>
     </Container>
   );
 };
-export default Login;
+export default Register;
