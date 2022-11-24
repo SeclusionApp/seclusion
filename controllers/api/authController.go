@@ -97,19 +97,23 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
-	cookie := &fiber.Cookie{
+	cookie := fiber.Cookie{
 		Name:     "token",
 		Value:    token,
 		Expires:  time.Now().Add(time.Second * config.JWT_EXPIRY),
+		Domain:  util.GetEnv("COOKIE_DOMAIN", "localhost"),
 		HTTPOnly: true,
+		MaxAge:  3600,
 	}
 
-	c.Cookie(cookie)
+	c.Cookie(&cookie)
 
 	return c.JSON(fiber.Map{
 		"message": "Successfully logged in",
 		"token":   token,
+		"expires":time.Now().Add(time.Second * config.JWT_EXPIRY),
 	})
+	
 }
 
 func Logout(c *fiber.Ctx) error {
