@@ -43,7 +43,7 @@ const Home: NextPage = () => {
   });
 
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>Seclusion</title>
         <link rel="icon" href="/favicon.ico" />
@@ -69,7 +69,7 @@ const Home: NextPage = () => {
           </Container>
         )}
       </Box>
-    </div>
+    </>
   );
 };
 
