@@ -103,6 +103,7 @@ func Login(c *fiber.Ctx) error {
 		Expires:  time.Now().Add(time.Second * config.JWT_EXPIRY),
 		Domain:  util.GetEnv("COOKIE_DOMAIN", "localhost"),
 		HTTPOnly: true,
+		Secure:  false,
 		MaxAge:  3600,
 	}
 
