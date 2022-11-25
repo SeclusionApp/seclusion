@@ -38,7 +38,7 @@ func Messages(c *fiber.Ctx) error {
 
 }
 
-func Message(c *fiber.Ctx) error {
+func Message(c *fiber.Ctx) error { 
 
 	token := c.Cookies("token")
 
@@ -92,6 +92,7 @@ func Message(c *fiber.Ctx) error {
 		if err := c.BodyParser(&data); err != nil {
 			return c.Status(400).JSON(fiber.Map{
 				"status": "error",
+				"error":  err,
 			})
 		}
 
