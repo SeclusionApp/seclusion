@@ -19,7 +19,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import { FaUser, FaUserPlus, FaUserSlash } from "react-icons/fa";
 
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import DarkMenuItem from "./DarkMenuItem";
 interface UserObj {
@@ -29,6 +29,7 @@ interface UserObj {
 }
 const NavBar: NextPage = () => {
   const [loggedIn, setLoggedIn] = useState(false);
+  const router = useRouter();
   async function getData() {
     try {
       const res = await fetch("http://localhost:8080/v1/user", {
@@ -77,6 +78,22 @@ const NavBar: NextPage = () => {
               Welcome: {user?.username}
             </MenuButton>
             <MenuList>
+              <MenuGroup title="Profile">
+                <MenuItem icon={<Icon as={FaUser} />}>My Account</MenuItem>
+                <MenuItem
+                  icon={
+                    <Icon
+                      as={FaUserPlus}
+                      onClick={() => {
+                        router.push("/channel");
+                      }}
+                    />
+                  }
+                >
+                  Create Channel
+                </MenuItem>
+              </MenuGroup>
+
               <MenuGroup title="View Options">
                 <DarkMenuItem />
               </MenuGroup>
