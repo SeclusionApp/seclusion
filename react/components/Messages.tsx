@@ -33,79 +33,89 @@ export const Messages: React.FC<MessagesProps> = ({ id }) => {
   }, []);
   return (
     <Flex>
-      {data?.messages.map((message) => (
-        <Box
-          onClick={async () => {
-            const d = await fetch(
-              "http://localhost:8080/v1/users/" + message.user_id,
-              {
+      <Stack spacing={8} rounded={1}>
+        {data?.messages.map((message) => (
+          <Box
+            onClick={async () => {
+              const d = await fetch(
+                "http://localhost:8080/v1/users/" + message.user_id,
+                {
+                  method: "GET",
+                  credentials: "include",
+                }
+              );
+              console.log(d);
+              const json = await d.json();
+              console.log("json", json);
+              setUser(json.user);
+            }}
+          >
+            <Flex>
+              <Text>{message.content}</Text>
+              <Text>{dateToHowLong(unixToDate(message.time))}</Text>
+              <Text>{user?.username}</Text>
+            </Flex>
+          </Box>
+        ))}
+        <Container>
+          <Formik
+            initialValues={{ content: "" }}
+            onSubmit={async (values) => {
+              const meRes = await fetch("http://localhost:8080/v1/user", {
                 method: "GET",
                 credentials: "include",
-              }
-            );
-            console.log(d);
-            const json = await d.json();
-            console.log("json", json);
-            setUser(json.user);
-          }}
-        >
-          <Flex>
-            <Text>{message.content}</Text>
-            <Text>{dateToHowLong(unixToDate(message.time))}</Text>
-            <Text>{user?.username}</Text>
-          </Flex>
-        </Box>
-      ))}
-      <Container>
-        <Formik
-          initialValues={{ content: "" }}
-          onSubmit={async (values) => {
-            const meRes = await fetch("http://localhost:8080/v1/user", {
-              method: "GET",
-              credentials: "include",
-            });
-            const me = await meRes.json();
+              });
+              const me = await meRes.json();
 
-            const cusotmValues = {
-              ...values,
-              channel_id: String(id),
-              user_id: String(me.user.id),
-            };
-            const res = await fetch("http://localhost:8080/v1/message", {
-              method: "POST",
-              credentials: "include",
-              body: JSON.stringify(cusotmValues),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-            console.log(res);
-            //@ts-ignore
-            textInputRef?.current?.clear();
+              const cusotmValues = {
+                ...values,
+                channel_id: String(id),
+                user_id: String(me.user.id),
+              };
+              const res = await fetch("http://localhost:8080/v1/message", {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(cusotmValues),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+              console.log(res);
 
-            const data = await res.json();
-            console.log(data);
-          }}
-        >
-          {({ values, handleChange, handleSubmit }) => (
-            <>
-              <Input
-                name="message"
-                placeholder="Type a message"
-                w="50%"
-                value={values.content}
-                onChange={handleChange("content")}
-                onSubmitCapture={() => handleSubmit()}
-                onSubmit={() => handleSubmit()}
-                type="text"
-              />
-              <Button pl={25} onClick={() => handleSubmit()}>
-                Submit
-              </Button>
-            </>
-          )}
-        </Formik>
-      </Container>
+              const d = await res.json();
+
+              console.log("data", d);
+
+              console.log("New MSG: ", d.message);
+
+              setData((prev: any) => {
+                return {
+                  ...prev,
+                  messages: [...prev!.messages, d.message],
+                };
+              });
+            }}
+          >
+            {({ values, handleChange, handleSubmit }) => (
+              <>
+                <Input
+                  name="message"
+                  placeholder="Type a message"
+                  w="50%"
+                  value={values.content}
+                  onChange={handleChange("content")}
+                  onSubmitCapture={() => handleSubmit()}
+                  onSubmit={() => handleSubmit()}
+                  type="text"
+                />
+                <Button pl={25} onClick={() => handleSubmit()}>
+                  Submit
+                </Button>
+              </>
+            )}
+          </Formik>
+        </Container>
+      </Stack>
     </Flex>
   );
 };

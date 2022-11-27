@@ -16,6 +16,24 @@ import { dateToHowLong, unixToDate } from "../utils/time";
 
 const Home: NextPage = () => {
   const textInputRef = useRef<typeof Input>();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch("http://localhost:8080/v1/user", {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.message === "Invalid Token") {
+        setLoggedIn(false);
+      }
+      if (data.user) {
+        setLoggedIn(true);
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -25,8 +43,7 @@ const Home: NextPage = () => {
         <Heading>Home</Heading>
         <Text>Home page</Text>
       </Container>
-
-      <Channel />
+      {loggedIn ? <Channel /> : null}
     </>
   );
 };
